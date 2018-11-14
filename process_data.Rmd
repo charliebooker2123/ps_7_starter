@@ -9,11 +9,28 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(knitr)
+library(fs)
 
 ```
 
 ```{r, echo = FALSE, message = FALSE}
 df <- read_csv("mt_2_results.csv")
 
+#wb makes sure the download works whetehr your on windows or mac computer
+#quiet keeps the data stuff in R Markdown quiet when uploading file
+
+
+download.file(url = "https://goo.gl/ZRCBda",
+              destfile = "Polling.zip",
+              quiet = TRUE,
+              mode = "wb")
+
+polling <- unzip("Polling.zip")
+
+#dir means directory and ls means list. .id will say its source
+upshot <- fs::dir_ls("2018-live-poll-results-master/data") %>%
+   map_dfr(read_csv, .id = "source")
+
+#sample  command will give me 10 random of set
 ```
 
