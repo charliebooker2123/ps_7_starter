@@ -1,0 +1,19 @@
+---
+title: "Starting Problem Set 7"
+author: "Charlie Booker"
+date: "November 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(knitr)
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+df <- read_csv("mt_2_results.csv")
+
+```
+
