@@ -29,7 +29,11 @@ polling <- unzip("Polling.zip")
 
 #dir means directory and ls means list. .id will say its source
 upshot <- fs::dir_ls("2018-live-poll-results-master/data") %>%
-   map_dfr(read_csv, .id = "source")
+   map_dfr(read_csv, .id = "source") %>%
+  
+   mutate(district = str_sub(source, 53, 54)) %>%
+  
+  
 
 #sample  command will give me 10 random of set
 ```
