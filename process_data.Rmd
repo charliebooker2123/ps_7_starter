@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(knitr)
 library(fs)
-
+library(graphics)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
@@ -43,7 +43,7 @@ upshot <- fs::dir_ls("2018-live-poll-results-master/data") %>%
   mutate(wave = str_sub(source, -5,-5))
 
 upshot2 <- upshot %>%
-  select(response, educ, final_weight) %>%
+  select(response, educ, final_weight, state) %>%
     mutate(response = recode(response, 
                           "3" = "NoParty",
                           "4" = "NoParty",
@@ -56,14 +56,22 @@ upshot2 <- upshot %>%
                           "Some college or trade school" = "Some College/Assoc Degree",
                           "Bachelors\' degree" = "College Grad",
                        "Graduate or Professional Degree" = "College Grad")) %>% 
-  filter(response != "NoParty") %>%
-  group_by(educ, response) %>%
+  group_by(state, educ, response) %>%
   summarise(final_weight1 = sum(final_weight)) %>%
-  spread(key = response, value = final_weight1)
+  filter(educ != "[DO NOT READ] Refused") %>%
+  spread(key = response, value = final_weight1) 
+
+upshot2[is.na(upshot2)] <- 0
+
+upshot2 <- upshot2 %>%
+   mutate(tfinal_weight = NoParty + Dem + Rep + Und )%>%
+   mutate(rep_adv = (Rep - Dem) / tfinal_weight) 
 
   
-  
-
+  #sample pie chart
+upshot3 <- upshot2 %>%
+  filter(state == "AZ") 
+  pie(upshot3$Dem, labels = upshot3$educ, main="Pie Chart of Countries")
 #sample  command will give me 10 random of set
 ```
 
