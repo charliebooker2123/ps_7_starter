@@ -41,7 +41,8 @@ upshot <- fs::dir_ls("2018-live-poll-results-master/data") %>%
                             TRUE ~ "House")) %>%
   #making wave variable using the 5th last character
   mutate(wave = str_sub(source, -5,-5))
-
+#
+select and grouping responses
 upshot2 <- upshot %>%
   select(response, educ, final_weight, state) %>%
     mutate(response = recode(response, 
@@ -49,7 +50,7 @@ upshot2 <- upshot %>%
                           "4" = "NoParty",
                           "5" = "NoParty",
                           "6" = "NoParty")) %>%
-  
+  #grouping education into 3 categories
   mutate(educ = recode(educ, 
                           "High school" = "HS Grad or Less",
                           "Grade school" = "HS Grad or Less",
@@ -61,6 +62,7 @@ upshot2 <- upshot %>%
   filter(educ != "[DO NOT READ] Refused") %>%
   spread(key = response, value = final_weight1) 
 
+#NA's will be converted to 0's
 upshot2[is.na(upshot2)] <- 0
 
 upshot2 <- upshot2 %>%
